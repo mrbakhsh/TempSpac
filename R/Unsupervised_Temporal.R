@@ -2,12 +2,7 @@
 ## Implements unsupervised learning & visualization of temporal data
 
 
-##################################################################
-# ---------------------------------------------------------------#
-# -------------------Temporal Proteomic -------------------------#
-# --------------- Unsupervised Clustering -----------------------#
-# --------------Author: Matineh Rahmatbakhsh --------------------#
-##################################################################
+
 library(gplots)
 library(ComplexHeatmap)
 library(circlize)
