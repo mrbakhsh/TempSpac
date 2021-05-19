@@ -3,18 +3,10 @@
 ## model: string specifying which classification or regression model to use
 ## organelle: organelle-specific protein distribution of desired organelle 
 
-##################################################################
-# ---------------------------------------------------------------#
-# -------------------Spatial Proteomic --------------------------#
-# -----------------Supervised Clustering ------------------------#
-# --------------Author: Matineh Rahmatbakhsh --------------------#
-##################################################################
 
 
 
-#preparer the training data 
-
-ml_learning <- 
+ml_learning_spatial <- 
     function(x, model,organelle) {
         
     library(gplots)
@@ -27,6 +19,7 @@ ml_learning <-
     library(magrittr)
         
     df <- x
+    #preparer the training data 
     x_train <- 
         df %>%
         as.data.frame(.) %>%
