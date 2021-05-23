@@ -1,2 +1,1 @@
-# TempSpac
-Scripts for "Bioinformatic Analysis of Temporal and Spatial Proteome Alternations During Infections"
+## Scripts for "Bioinformatic Analysis of Temporal and Spatial Proteome Alternations During Infections"
