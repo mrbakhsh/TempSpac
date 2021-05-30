@@ -1,6 +1,7 @@
+##################################################################
+######unsupervised learning & visualization of spatial data#######
+##################################################################
 
-
-## Implements unsupervised learning & visualization of spatial data (prior to ML learning)
 
 
 
@@ -20,13 +21,13 @@ library(Rtsne)
 
 
 
-
-
 #load the data
 df <-
-    fread("Spatial_SampleData.csv")
+    fread(file.choose())
 
-########### k-means clustering ################
+##################################################################
+#################### 1. k-means clustering
+##################################################################
 
 set.seed(1)
 #define the optimal number of cluster (e.g., WCC)
@@ -35,19 +36,21 @@ fviz_nbclust(df[,-c(1,8)], kmeans, method = "wss")
 autoplot(kmeans(df[,-c(1,8)], 3), data = df[,-c(1,8)])+
     theme_bw()
 
-
-########### Fuzzy clustering ################
+##################################################################
+#################### 2. Fuzzy clustering
+##################################################################
 
 #perfrom fuzzy clustering & visualization on PCA
 set.seed(1)
 autoplot(fanny(df[,-c(1,8)], 3)) +
     theme_bw()
 
+##################################################################
+#################### 3. Hierarchical clustering
+##################################################################
 
 
-########### Hierarchical clustering ################
-
-#HC.clustering & data visulaization on heatmap
+#Hierarchical clustering & data visulaization on heatmap
 Heatmap(as.matrix(df[,-c(1,8)]),
     cluster_rows = TRUE,
     clustering_distance_rows = "euclidean",
@@ -90,7 +93,10 @@ pca_res <- #keep the numeric data
 autoplot(pca_res, data = df[,-1], colour = "Marker") +
     theme_bw()
 
-################ t-sne plot #####################
+
+##################################################################
+#################### 4. t-sne plot 
+##################################################################
 
 ## Executing the algorithm on curated data
 tsne_out <-
