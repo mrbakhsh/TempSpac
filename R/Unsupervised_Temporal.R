@@ -18,19 +18,18 @@ library(magrittr)
 library(factoextra)
 
 
+
+df <-
+    read.table(file.choose(),
+        sep="\t", header =T, row.names = 1)
+scaledata <-
+    t(scale(t(df))) # Center and scale data input
+
 ##################################################################
 #################### 1. Hierarchical Clustering
 ##################################################################
 
-df <- ###import the data
-    read.table("Sample.data.txt",
-        sep="\t", header =T, row.names = 1)
-scaledata <-
-    t(scale(t(df))) # Centers and scales data.
-
-
-
-# HC clustering & visualizing the result as heatmap ###
+# Hierarchical clustering & visualizing the result as heatmap 
 col_fun = #define the color
     colorRamp2(c(-2,-1, 0,1,2),
         c("#08306b","#08519c","black","#f4e52a","#f2e216"))
@@ -45,7 +44,7 @@ Heatmap(as.matrix(scaledata),
     heatmap_legend_param = list(title = "color Key"),
     col = col_fun)
 
-#perfrom hierarchical clustering using basic functions
+# Hierarchical clustering using basic functions
 set.seed(222)
 hr <- # compute dissimilarity matrix and cluster rows
     hclust(dist(scaledata, method="euclidean"),
@@ -66,11 +65,12 @@ plot(treeR,
 colored_bars(hclustCutree, treeR,
     sort_by_labels_order = T, y_shift=-0.1,
     rowLabels = c("h=3"),cex.rowLabels=0.7)
-#this will add lines showing the cut heights
+#add line showing the cut heights
 abline(h=3.0, lty = 2, col="grey")
 
 
-###Plotting the centroids###
+#Plotting the centroids
+
 extClust <- #xtract the cluster
     df_Cluster$cluster
 
@@ -110,7 +110,7 @@ print(ggplot(hc_longdf,
 
 
 
-###Using a cluster score to identify core genes###
+#using a cluster score to identify core genes
 
 clust <- #Core genes for any cluster(e.g.,cluster = 2)
     hc_longdf[hc_longdf$cluster==3,]
@@ -155,10 +155,6 @@ ggplot(melt_hc, aes(x=condition,y=value)) +
         title = "Cluster score to identify core genes")
 
 
-
-
-
-
 # Add cluster number to the original df
 df_Cluster <-
     df %>%
@@ -172,16 +168,9 @@ df_Cluster <-
 #################### 2. k-means Clustering
 ##################################################################
 
-df <- ###import the data
-    read.table("Sample.data.txt",
-        sep="\t", header =T, row.names = 1)
-scaledata <-
-    t(scale(t(z))) # Centers and scales data.
-
 
 #define the optimal number of clusters
 fviz_nbclust(scaledata, kmeans, method = "wss")
-
 
 #set.seed(222)
 kClust <-
@@ -190,9 +179,7 @@ kClusters <-
     kClust$cluster
 
 
-
-
-###Plotting the centroids###
+#Plotting the centroids
 extClust <- #xtract the cluster
     df_Cluster$cluster
 
@@ -237,7 +224,7 @@ df_Cluster <-
     tibble::rownames_to_column("Gene") %>%
     mutate(cluster = kClust$cluster)
 
-###Using a cluster score to identify core genes###
+#using a cluster score to identify core genes
 
 clust <- #Core genes for any cluster (e.g., cluster = 2)
     k_longdf[k_longdf$cluster==2,]
@@ -266,7 +253,7 @@ meltK$condition <-
 meltK <-
     left_join(meltK, cor.comp, by='gene')
 
-# Everything on the same plot
+# generate the figure
 ggplot(meltK, aes(x=condition,y=value)) +
         geom_line(aes(colour=cor.score, group=gene)) +
         theme_bw()+
@@ -288,31 +275,25 @@ ggplot(meltK, aes(x=condition,y=value)) +
 #################### 3. FCM clustering
 ##################################################################
 
-df <- ###import the data
-    read.table("Sample.data.txt",
-        sep="\t", header =T, row.names = 1)
-
-
 #add time point to the data
 time <- c(1,2,3,4,5)
-df <- rbind(time, df)
-row.names(df)[1]<-"time"
+df.t <- rbind(time, df)
+row.names(df.t)[1]<-"time"
 
 
 #save it to a temp file
 tmp <- tempfile()
-write.table(df,file=tmp, sep='\t', quote = F, col.names=NA)
+write.table(df.t,file=tmp, sep='\t', quote = F, col.names=NA)
 
 #read the file as an expression set
-df <-
+df.t <-
     table2eset(file=tmp)
 
 #scale the data
 scaleddf <-
-    standardise(df)
+    standardise(df.t)
 
-#estimate the fuzzifier
-
+#estimate the fuzzier
 fuzz <-
     mestimate(scaleddf)
 
@@ -323,10 +304,10 @@ fuzzy_clust <- #cluster the data using FCM approach
 
 mfuzz.plot(scaleddf,cl=fuzzy_clust,mfrow=c(1,1),
     new.window=FALSE,
-    time.labels=c(0,10,20,30))
+    time.labels=c(0,10,20,30,40))
 
 
-#extract the membershipr score and add it the original df
+#extract membership score
 memScore <-
     acore(scaleddf,fuzzy_clust,min.acore=0)
 
@@ -342,17 +323,7 @@ memScore_df <-
 #################### 4. SOM clustering
 ##################################################################
 
-
-df <- ###import the data
-    read.table("Sample.data.txt",
-        sep="\t", header =T, row.names = 1)
-
-dfscaled <- #noramlize the data
-    scale(df)
-
-#SOM
 set.seed(222)
-
 g <-
     somgrid(xdim = 3, ydim = 3, topo = "rectangular")
 map <-
