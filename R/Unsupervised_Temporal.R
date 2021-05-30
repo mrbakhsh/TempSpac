@@ -1,6 +1,7 @@
 
-## Implements unsupervised learning & visualization of temporal data
-
+##################################################################
+######unsupervised learning & visualization of temporal data######
+##################################################################
 
 
 library(gplots)
@@ -23,7 +24,7 @@ df <-
     read.table(file.choose(),
         sep="\t", header =T, row.names = 1)
 scaledata <-
-    t(scale(t(df))) # Center and scale data input
+    t(scale(t(df))) #center and scale data input
 
 ##################################################################
 #################### 1. Hierarchical Clustering
@@ -69,9 +70,9 @@ colored_bars(hclustCutree, treeR,
 abline(h=3.0, lty = 2, col="grey")
 
 
-#Plotting the centroids
+#plotting the centroids
 
-extClust <- #xtract the cluster
+extClust <- #extract the cluster
     df_Cluster$cluster
 
 
@@ -94,7 +95,7 @@ hc_longdf$condition <-
     factor(hc_longdf$condition,
         levels=unique(hc_longdf$condition))
 
-print(ggplot(hc_longdf,
+ggplot(hc_longdf,
     aes(x=condition,y=value,
         group=cluster,
         colour=as.factor(cluster))) +
@@ -106,13 +107,13 @@ print(ggplot(hc_longdf,
             axis.line = element_line(colour = "black")) +
         ylab("value")+
         labs(x = "condition", y = "value(i.e., Relative abundace)",
-            title = "cluster centroids"))
+            title = "cluster centroids")
 
 
 
 #using a cluster score to identify core genes
 
-clust <- #Core genes for any cluster(e.g.,cluster = 2)
+clust <- #Core genes for any cluster(e.g., cluster=2)
     hc_longdf[hc_longdf$cluster==3,]
 
 
@@ -253,7 +254,7 @@ meltK$condition <-
 meltK <-
     left_join(meltK, cor.comp, by='gene')
 
-# generate the figure
+# plot
 ggplot(meltK, aes(x=condition,y=value)) +
         geom_line(aes(colour=cor.score, group=gene)) +
         theme_bw()+
