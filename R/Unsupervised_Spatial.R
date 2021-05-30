@@ -87,7 +87,9 @@ abline(h=1.0, lty = 2, col="grey")
 
 
 
-######### Overlay marker on PCA plot ############
+##################################################################
+#################### 4. PCA plot 
+##################################################################
 pca_res <- #keep the numeric data
     prcomp(df[,-c(1,8)], scale. = TRUE)
 autoplot(pca_res, data = df[,-1], colour = "Marker") +
@@ -95,7 +97,7 @@ autoplot(pca_res, data = df[,-1], colour = "Marker") +
 
 
 ##################################################################
-#################### 4. t-sne plot 
+#################### 5. t-sne plot 
 ##################################################################
 
 ## Executing the algorithm on curated data
