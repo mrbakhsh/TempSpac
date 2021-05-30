@@ -39,9 +39,11 @@ ml_learning_spatial <-
     
     # define training control using k-fold Cross Validation
     train_control <- 
-        trainControl(method="cv",
-            classProbs=TRUE,
-            number=10, verbose = T,savePred=T)
+        trainControl(method="repeatedcv",#repeated cross-validation
+                     number=10, #number of resampling iterations
+                     repeats = 3, #sets of folds to for repeated cross-validation
+                     classProbs=TRUE, 
+                     verbose = T,savePred=T)
     
     #train the classifier (e.g, random forest)
     for (ml in model) {
@@ -51,8 +53,8 @@ ml_learning_spatial <-
         train(Marker~., data=x_train,
             trControl=train_control,
             method=ml,
-            preProcess = c("center", "scale"),
-            metric= "Accuracy")
+            preProcess = c("center", "scale"), # necessary task
+             )
     }
     
     
