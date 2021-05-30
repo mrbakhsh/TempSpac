@@ -1,7 +1,10 @@
-## Implements supervised learning & visualization to infer protein sub-cellular localisation
-## x : data frame where rows are proteins and columns are fractions
-## model: string specifying which classification or regression model to use
-## organelle: organelle-specific protein distribution of desired organelle 
+##################################################################
+######supervised learning & protein localization prediction#######
+##################################################################
+
+# x : data frame where rows are proteins and columns are fractions
+# model: string specifying which classification model to use
+# organelle:organelle-specific protein distribution of desired organelle (e.g., Mitochondria)
 
 
 
@@ -64,9 +67,10 @@ ml_learning_spatial <-
     predictdf  <-
         predict(rfModel,predictdf, type = "prob") 
     
-    
-    ##################visulaize the result##########################
-    
+##################################################################
+#################### visulaize the result
+##################################################################    
+        
     #organelle-specific score distributions
     datBOX <- 
         predictdf %>%
@@ -84,8 +88,8 @@ ml_learning_spatial <-
         theme_bw()) 
     
     
-    #Visualize the finalresult on PCA
-    finaldf <- #this includes predicted scores for each compartment
+    #visualize the result on PCA
+    finaldf <- #predicted scores for each compartment
         predictdf %>%
         tibble::rownames_to_column('Gene') %>%
         gather("Predicted_Compartment", "probScore", 2:10) %>%
