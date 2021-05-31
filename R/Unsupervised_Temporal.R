@@ -41,7 +41,7 @@ Heatmap(as.matrix(scaledata),
     clustering_method_columns = "complete",
     show_row_names = F,
     show_heatmap_legend = TRUE,
-    heatmap_legend_param = list(title = "color Key"))
+    heatmap_legend_param = list(title = "color Key"),
     col = col_fun)
 
 # Hierarchical clustering using basic functions
