@@ -49,7 +49,7 @@ ml_learning_spatial <-
     for (ml in model) {
         message(ml)
     set.seed(100)
-    rfModel <- 
+    fit <- 
         train(Marker~., data=x_train,
             trControl=train_control,
             method=ml,
@@ -67,14 +67,14 @@ ml_learning_spatial <-
     
     set.seed(101)
     predictdf  <-
-        predict(rfModel,predictdf, type = "prob") 
+        predict(fit,predictdf, type = "prob") 
     
 ##################################################################
 #################### visulaize the result
 ##################################################################    
         
     #organelle-specific score distributions
-    datBOX <- 
+    dat <- 
         predictdf %>%
         gather("Compartment", "probScore", 1:9) %>%
         group_by(Compartment) %>%
@@ -83,7 +83,7 @@ ml_learning_spatial <-
             list(factor))
     
     
-    print(ggplot(datBOX, aes(Compartment, probScore)) +
+    print(ggplot(dat, aes(Compartment, probScore)) +
         geom_boxplot(aes(fill=Compartment)) +
         geom_hline(yintercept=0.5, linetype="dashed", #0.50 cutoff
             color = "red", size=1) +
