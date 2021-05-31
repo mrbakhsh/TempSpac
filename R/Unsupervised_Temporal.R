@@ -1,4 +1,3 @@
-
 ##################################################################
 ######unsupervised learning & visualization of temporal data######
 ##################################################################
@@ -21,10 +20,10 @@ library(factoextra)
 
 
 df <-
-    read.table(file.choose(),
+    read.table(file.choose("Temporal_SampleData.txt"),
         sep="\t", header =T, row.names = 1)
 scaledata <-
-    t(scale(t(df))) #center and scale data input
+    t(scale(t(df))) #center and scale data input (optional)
 
 ##################################################################
 #################### 1. Hierarchical Clustering
@@ -42,7 +41,7 @@ Heatmap(as.matrix(scaledata),
     clustering_method_columns = "complete",
     show_row_names = F,
     show_heatmap_legend = TRUE,
-    heatmap_legend_param = list(title = "color Key"),
+    heatmap_legend_param = list(title = "color Key"))
     col = col_fun)
 
 # Hierarchical clustering using basic functions
@@ -54,7 +53,7 @@ hr <- # compute dissimilarity matrix and cluster rows
 treeR <- #cluster dendogram
     as.dendrogram(hr, method = "average")
 hclustCutree =
-    cutree(hr, h=3) #cut tree at height of 1.0
+    cutree(hr, h=3.9) #cut tree at height of 1.0
 
 #plot the dendogram
 plot(treeR,
@@ -65,15 +64,15 @@ plot(treeR,
 #color the clusters
 colored_bars(hclustCutree, treeR,
     sort_by_labels_order = T, y_shift=-0.1,
-    rowLabels = c("h=3"),cex.rowLabels=0.7)
+    rowLabels = c("h=3.9"),cex.rowLabels=0.7)
 #add line showing the cut heights
-abline(h=3.0, lty = 2, col="grey")
+abline(h=3.9, lty = 2, col="grey")
 
 
 #plotting the centroids
 
 extClust <- #extract the cluster
-    df_Cluster$cluster
+    hclustCutree
 
 
 # function to find centroid in cluster i
@@ -99,21 +98,21 @@ ggplot(hc_longdf,
     aes(x=condition,y=value,
         group=cluster,
         colour=as.factor(cluster))) +
-        geom_point() +
-        geom_line() +
-        theme_bw() +
-        theme(panel.grid.major = element_blank(),
-            panel.grid.minor = element_blank(),
-            axis.line = element_line(colour = "black")) +
-        ylab("value")+
-        labs(x = "condition", y = "value(i.e., Relative abundace)",
-            title = "cluster centroids")
+    geom_point() +
+    geom_line() +
+    theme_bw() +
+    theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.line = element_line(colour = "black")) +
+    ylab("value")+
+    labs(x = "condition", y = "value(i.e., Relative abundace)",
+        title = "cluster centroids")
 
 
 
 #using a cluster score to identify core genes
 
-clust <- #Core genes for any cluster(e.g., cluster=2)
+clust <- #Core genes for any cluster(e.g., cluster=3)
     hc_longdf[hc_longdf$cluster==3,]
 
 
@@ -173,16 +172,15 @@ df_Cluster <-
 #define the optimal number of clusters
 fviz_nbclust(scaledata, kmeans, method = "wss")
 
-#set.seed(222)
+set.seed(222)
 kClust <-
     kmeans(scaledata, centers=4, nstart = 1000, iter.max = 20)
-kClusters <-
-    kClust$cluster
+
 
 
 #Plotting the centroids
-extClust <- #xtract the cluster
-    df_Cluster$cluster
+extClust <- #extract the cluster
+    kClust$cluster
 
 
 
@@ -220,7 +218,7 @@ print(ggplot(k_longdf,
 
 #add cluster to df
 df_Cluster <-
-    z %>%
+    df %>%
     as.data.frame(.) %>%
     tibble::rownames_to_column("Gene") %>%
     mutate(cluster = kClust$cluster)
@@ -256,18 +254,18 @@ meltK <-
 
 # plot
 ggplot(meltK, aes(x=condition,y=value)) +
-        geom_line(aes(colour=cor.score, group=gene)) +
-        theme_bw()+
-        theme(panel.grid.major = element_blank(),
-            panel.grid.minor = element_blank(),
-            axis.line = element_line(colour = "black")) +
-        scale_colour_gradientn(colours=c('black','yellow')) +
-        #this adds the core
-        geom_line(data=clust,
-            aes(condition,value, group=cluster),
-            color="red",inherit.aes=FALSE, size = 2) +
-        labs(x = "condition", y = "value(i.e., Relative abundace)",
-            title = "Cluster score to identify core genes")
+    geom_line(aes(colour=cor.score, group=gene)) +
+    theme_bw()+
+    theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.line = element_line(colour = "black")) +
+    scale_colour_gradientn(colours=c('black','yellow')) +
+    #this adds the core
+    geom_line(data=clust,
+        aes(condition,value, group=cluster),
+        color="red",inherit.aes=FALSE, size = 2) +
+    labs(x = "condition", y = "value(i.e., Relative abundace)",
+        title = "Cluster score to identify core genes")
 
 
 
@@ -326,9 +324,11 @@ memScore_df <-
 
 set.seed(222)
 g <-
-    somgrid(xdim = 3, ydim = 3, topo = "rectangular")
+    somgrid(xdim = 3, #dimensions of the grid
+        ydim = 3,#dimensions of the grid
+        topo = "hexagonal")# topology of the grid.
 map <-
-    som(dfscaled,
+    som(scaledata,
         grid = g,
         alpha = c(0.05,0.01),
         radius = 1)
@@ -345,3 +345,99 @@ df_Cluster <-
     cbind(df,map$unit.classif) %>%
     dplyr::rename(cluster = `map$unit.classif`)%>%
     tibble::rownames_to_column("Gene")
+
+
+
+
+
+#Plotting the centroids
+extClust <- #extract the cluster
+    df_Cluster$cluster
+
+
+
+# function to find centroid in cluster i
+ClustCent = function(i, dat, clusters) {
+    ind = (clusters == i)
+    colMeans(dat[ind,])
+}
+kClustcentroids <-
+    sapply(levels(factor(extClust)), ClustCent, scaledata, extClust)
+
+k_longdf <-
+    melt(kClustcentroids)
+colnames(k_longdf) <-
+    c('condition','cluster','value')
+
+#plot
+k_longdf$condition <-
+    factor(k_longdf$condition, levels=unique(k_longdf$condition))
+
+print(ggplot(k_longdf,
+    aes(x=condition,y=value,
+        group=cluster,
+        colour=as.factor(cluster))) +
+        geom_point() +
+        geom_line() +
+        theme_bw() +
+        theme(panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            axis.line = element_line(colour = "black")) +
+        ylab("value")+
+        labs(x = "condition", y = "value(i.e., Relative abundace)",
+            title = "cluster centroids"))
+
+
+#add cluster to df
+df_Cluster <-
+    df %>%
+    as.data.frame(.) %>%
+    tibble::rownames_to_column("Gene") %>%
+    mutate(cluster = kClust$cluster)
+
+#using a cluster score to identify core genes
+
+clust <- #Core genes for any cluster (e.g., cluster = 2)
+    k_longdf[k_longdf$cluster==2,]
+
+
+K <-###extract the selected cluster from the scaled data
+    (scaledata[extClust==2,])
+
+#compute correlation with cluster centroid
+corScore <-
+    function(x){cor(x,clust$value)}
+cor.comp <-
+    as.data.frame(apply(K, 1, corScore))
+colnames(cor.comp)[1] <-
+    "cor.score"
+cor.comp <-
+    tibble::rownames_to_column(cor.comp, "gene")
+#convert to long df
+meltK <-
+    melt(K)
+colnames(meltK) <-
+    c('gene','condition','value')
+meltK$condition <-
+    factor(meltK$condition, levels=unique(meltK$condition))
+#add the correlation score
+meltK <-
+    left_join(meltK, cor.comp, by='gene')
+
+# plot
+ggplot(meltK, aes(x=condition,y=value)) +
+    geom_line(aes(colour=cor.score, group=gene)) +
+    theme_bw()+
+    theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.line = element_line(colour = "black")) +
+    scale_colour_gradientn(colours=c('black','yellow')) +
+    #this adds the core
+    geom_line(data=clust,
+        aes(condition,value, group=cluster),
+        color="red",inherit.aes=FALSE, size = 2) +
+    labs(x = "condition", y = "value(i.e., Relative abundace)",
+        title = "Cluster score to identify core genes")
+
+
+
