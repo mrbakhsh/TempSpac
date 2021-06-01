@@ -4,131 +4,141 @@
 
 # x : data frame where rows are proteins and columns are fractions
 # model: string specifying which classification model to use
-# organelle:organelle-specific protein distribution of desired organelle (e.g., Mitochondria)
 
 
 
 
 ml_learning_spatial <- 
-    function(x, model,organelle) {
+    function(x, model) {
         
-    library(gplots)
-    library(ggplot2)
-    library(data.table)
-    library(dplyr)
-    library(tidyr)
-    library(reshape2)
-    library(caret)
-    library(magrittr)
+        library(gplots)
+        library(ggplot2)
+        library(data.table)
+        library(dplyr)
+        library(tidyr)
+        library(reshape2)
+        library(caret)
+        library(magrittr)
         
-    df <- x
-    #preparer the training data 
-    x_train <- 
-        df %>%
-        as.data.frame(.) %>%
-        set_rownames(.$Gene) %>%
-        dplyr::select(-1)%>%
-        filter(Marker != "unknown") %>%
-        mutate_at(vars(Marker), 
-            list(factor))
-    
-    x_train$Marker <- 
-        factor(x_train$Marker, 
-            labels = make.names(levels(x_train$Marker)))
-    
-    
-    # define training control using k-fold Cross Validation
-    train_control <- 
-        trainControl(method="repeatedcv",#repeated cross-validation
-                     number=10, #number of resampling iterations
-                     repeats = 3, #sets of folds to for repeated cross-validation
-                     classProbs=TRUE, 
-                     verbose = T,savePred=T)
-    
-    #train the classifier (e.g, random forest)
-    for (ml in model) {
-        message(ml)
-    set.seed(100)
-    fit <- 
-        train(Marker~., data=x_train,
-            trControl=train_control,
-            method=ml,
-            preProcess = c("center", "scale"), # necessary task
-             )
-    }
-    
-    
-    #Predict on the whole data 
-    predictdf <-
-        df %>%
-        as.data.frame(.) %>%
-        set_rownames(.$Gene) %>%
-        dplyr::select(-c(1,8))
-    
-    set.seed(101)
-    predictdf  <-
-        predict(fit,predictdf, type = "prob") 
-    
-##################################################################
-#################### visulaize the result
-##################################################################    
         
-    #organelle-specific score distributions
-    dat <- 
-        predictdf %>%
-        gather("Compartment", "probScore", 1:9) %>%
-        group_by(Compartment) %>%
-        filter(probScore > 0) %>%
-        mutate_at(vars(Compartment), 
-            list(factor))
-    
-    
-    print(ggplot(dat, aes(Compartment, probScore)) +
-        geom_boxplot(aes(fill=Compartment)) +
-        geom_hline(yintercept=0.5, linetype="dashed", #0.50 cutoff
-            color = "red", size=1) +
-        theme_bw()) 
-    
-    
-    #visualize the result on PCA
-    finaldf <- #predicted scores for each compartment
-        predictdf %>%
-        tibble::rownames_to_column('Gene') %>%
-        gather("Predicted_Compartment", "probScore", 2:10) %>%
-        group_by(Gene) %>%
-        dplyr::slice(which.max(probScore))  %>%
-        left_join(.,df) %>%
-        dplyr::select(-Marker) %>%
-        ungroup()
-    
-    
-    pca_res <- #keep the numeric data
-        prcomp(finaldf[,-c(1,2)], scale. = TRUE)
-    print(autoplot(pca_res,
-        data = finaldf[,-c(1)], 
-        colour = "Predicted_Compartment") +
-        theme_bw())
-    
-    
-    
-    #organelle-specific protein distributions along the gradient fractions
-    
-    #can select any compartment(e.g., Mitochondria)
-    for(cm in organelle){
-        message(cm)
+        df <- x
         
-    orgDist <- 
-        finaldf %>%
-        filter(Predicted_Compartment == cm) %>%
-        dplyr::select(c(1,4:9)) %>%
-        gather("condition", "intensity", 2:7)
-    
-    print(ggplot(data=orgDist,
-        aes(x=condition, y=intensity, group = Gene)) +
-        geom_line(color = "red") +
-        theme_bw())
+        if(!is.data.frame(df)){
+            stop("Input data must be data.frame")
         }
-return(predictdf)
+        
+        if(all(colnames(df) != "Marker") == TRUE){
+            stop("Marker is absent from the data.frame")
+        }
+        
+         if(all(colnames(df) != "Gene") == TRUE){
+            stop("Gene names is absent from the data.frame")
+        }
+        #preparer the training data 
+        x_train <- 
+            df %>%
+            as.data.frame(.) %>%
+            set_rownames(.$Gene) %>%
+            dplyr::select(-1)%>%
+            filter(Marker != "unknown") %>% #drop the unknown
+            mutate_at(vars(Marker), 
+                list(factor))
+        
+        x_train$Marker <- 
+            factor(x_train$Marker, 
+                labels = make.names(levels(x_train$Marker)))
+        
+        
+        # define training control using k-fold Cross Validation
+        train_control <- 
+            trainControl(method="repeatedcv",#repeated cross-validation
+                number=10, #number of resampling iterations
+                repeats = 10, #sets of folds to for repeated cross-validation
+                classProbs=TRUE, 
+                verbose = T,savePred=T)
+        
+        #train the classifier (e.g, random forest)
+        for (ml in model) {
+            message(ml)
+            set.seed(100)
+            fit <- 
+                train(Marker~., data=x_train,
+                    trControl=train_control,
+                    method=ml,
+                    preProcess = c("center", "scale"), # necessary task
+                    metric= "Accuracy"
+                )
+        }
+        
+        
+        #Predict on the whole data 
+        predictdf <-
+            df %>%
+            as.data.frame(.) %>%
+            set_rownames(.$Gene) %>%
+            dplyr::select(-c(1,8))
+        
+        set.seed(101)
+        predictdf  <-
+            predict(fit,predictdf, type = "prob") 
+        output <- 
+            predictdf %>%
+            tibble::rownames_to_column("Protein") %>%
+            gather('Organelle', "ProbScore", 2:ncol(.)) %>%
+            group_by(Protein) %>%
+            dplyr::slice(which.max(ProbScore))
+        
+        ##################################################################
+        #################### visulaize the result
+        ##################################################################    
+        
+        #organelle-specific score distributions
+        dat <- 
+            predictdf %>%
+            gather("Compartment", "probScore", 1:9) %>%
+            group_by(Compartment) %>%
+            filter(probScore > 0) %>%
+            mutate_at(vars(Compartment), 
+                list(factor))
+        
+        
+        print(ggplot(dat, aes(Compartment, probScore)) +
+                geom_boxplot(aes(fill=Compartment)) +
+                geom_hline(yintercept=0.5, linetype="dashed", #0.50 cutoff
+                    color = "red", size=1) +
+                theme_bw() +
+            theme(panel.grid = element_blank())  +
+            theme(text = element_text(colour = "black",size=12)) +
+            theme(
+                axis.text = element_text(colour = "black", size = 12),
+                axis.ticks.length = unit(0.25, "cm")))
+        
+        
+        #visualize the result on PCA
+        finaldf <- #predicted scores for each compartment
+            predictdf %>%
+            tibble::rownames_to_column('Gene') %>%
+            gather("Predicted_Compartment", "probScore", 2:10) %>%
+            group_by(Gene) %>%
+            dplyr::slice(which.max(probScore))  %>%
+            left_join(.,df) %>%
+            dplyr::select(-Marker) %>%
+            ungroup()
+        
+        
+        pca_res <- #keep the numeric data
+            prcomp(finaldf[,-c(1,2)], scale. = TRUE)
+        print(autoplot(pca_res,
+            data = finaldf[,-c(1)], 
+            colour = "Predicted_Compartment") +
+                theme_bw() +
+            theme(panel.grid = element_blank())  +
+            theme(text = element_text(colour = "black",size=12)) +
+            theme(
+                axis.text = element_text(colour = "black", size = 12),
+                axis.ticks.length = unit(0.25, "cm"))) 
+        
+        
+        return(output)
     }
-
 
