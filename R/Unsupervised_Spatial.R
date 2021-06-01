@@ -23,7 +23,7 @@ library(Rtsne)
 
 #load the data
 df <-
-    fread(file.choose())
+    fread(file.choose(""))
 
 ##################################################################
 #################### 1. k-means clustering
