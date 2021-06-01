@@ -33,8 +33,13 @@ set.seed(1)
 #define the optimal number of cluster (e.g., WCC)
 fviz_nbclust(df[,-c(1,8)], kmeans, method = "wss")
 #perform k-mean clustering & visualization on PCA
-autoplot(kmeans(df[,-c(1,8)], 3), data = df[,-c(1,8)])+
-    theme_bw()
+autoplot(kmeans(df[,-c(1,8)],3), data = df[,-c(1,8)])+
+    theme_bw() +
+    theme(panel.grid = element_blank())  +
+    theme(text = element_text(colour = "black",size=12)) +
+    theme(
+        axis.text = element_text(colour = "black", size = 12),
+        axis.ticks.length = unit(0.25, "cm")) 
 
 ##################################################################
 #################### 2. Fuzzy clustering
@@ -43,7 +48,13 @@ autoplot(kmeans(df[,-c(1,8)], 3), data = df[,-c(1,8)])+
 #perfrom fuzzy clustering & visualization on PCA
 set.seed(1)
 autoplot(fanny(df[,-c(1,8)], 3)) +
-    theme_bw()
+    theme_bw()+
+    theme(panel.grid = element_blank())  +
+    theme(text = element_text(colour = "black",size=12)) +
+    theme(
+        axis.text = element_text(colour = "black", size = 12),
+        axis.ticks.length = unit(0.25, "cm")) 
+
 
 ##################################################################
 #################### 3. Hierarchical clustering
@@ -93,7 +104,13 @@ abline(h=1.0, lty = 2, col="grey")
 pca_res <- #keep the numeric data
     prcomp(df[,-c(1,8)], scale. = TRUE)
 autoplot(pca_res, data = df[,-1], colour = "Marker") +
-    theme_bw()
+    theme_bw()+
+    theme(panel.grid = element_blank())  +
+    theme(text = element_text(colour = "black",size=12)) +
+    theme(
+        axis.text = element_text(colour = "black", size = 12),
+        axis.ticks.length = unit(0.25, "cm")) 
+
 
 
 ##################################################################
@@ -111,8 +128,15 @@ tsne_output <-
 
 ggplot(tsne_output, aes(V1, V2, color=df$Marker)) +
     geom_point() +
+    labs(x= "Dim1", y="Dim2", title = "Preplexity = 30") +
     theme_bw() +
-    labs(x= "Dim1", y="Dim2", title = "Preplexity = 30")
+    theme(panel.grid = element_blank())  +
+    theme(text = element_text(colour = "black",size=12)) +
+    theme(
+        axis.text = element_text(colour = "black", size = 12),
+        axis.ticks.length = unit(0.25, "cm")) 
+
+
 
 
 
