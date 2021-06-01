@@ -20,7 +20,7 @@ library(factoextra)
 
 
 df <-
-    read.table(file.choose("Temporal_SampleData.txt"),
+    read.table(file.choose(""),
         sep="\t", header =T, row.names = 1)
 scaledata <-
     t(scale(t(df))) #center and scale data input (optional)
