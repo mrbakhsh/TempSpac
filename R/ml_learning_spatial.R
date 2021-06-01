@@ -31,14 +31,14 @@ ml_learning_spatial <-
             stop("Marker is absent from the data.frame")
         }
         
-         if(all(colnames(df) != "Gene") == TRUE){
-            stop("Gene names is absent from the data.frame")
+         if(all(colnames(df) != "Protein.Name") == TRUE){
+            stop("Protein names is absent from the data.frame")
         }
         #preparer the training data 
         x_train <- 
             df %>%
             as.data.frame(.) %>%
-            set_rownames(.$Gene) %>%
+            set_rownames(.$Protein.Name) %>%
             dplyr::select(-1)%>%
             filter(Marker != "unknown") %>% #drop the unknown
             mutate_at(vars(Marker), 
@@ -75,7 +75,7 @@ ml_learning_spatial <-
         predictdf <-
             df %>%
             as.data.frame(.) %>%
-            set_rownames(.$Gene) %>%
+            set_rownames(.$Protein.Name) %>%
             dplyr::select(-c(1,8))
         
         set.seed(101)
@@ -83,9 +83,9 @@ ml_learning_spatial <-
             predict(fit,predictdf, type = "prob") 
         output <- 
             predictdf %>%
-            tibble::rownames_to_column("Protein") %>%
+            tibble::rownames_to_column("Protein.Name") %>%
             gather('Organelle', "ProbScore", 2:ncol(.)) %>%
-            group_by(Protein) %>%
+            group_by(Protein.Name) %>%
             dplyr::slice(which.max(ProbScore))
         
         ##################################################################
@@ -117,9 +117,9 @@ ml_learning_spatial <-
         #visualize the result on PCA
         finaldf <- #predicted scores for each compartment
             predictdf %>%
-            tibble::rownames_to_column('Gene') %>%
+            tibble::rownames_to_column('Protein.Name') %>%
             gather("Predicted_Compartment", "probScore", 2:10) %>%
-            group_by(Gene) %>%
+            group_by(Protein.Name) %>%
             dplyr::slice(which.max(probScore))  %>%
             left_join(.,df) %>%
             dplyr::select(-Marker) %>%
