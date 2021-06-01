@@ -1,4 +1,3 @@
-
 ##################################################################
 ######supervised learning & protein localization prediction#######
 ##################################################################
@@ -126,7 +125,6 @@ ml_learning_spatial <-
             dplyr::select(-Marker) %>%
             ungroup()
         
-        
         pca_res <- #keep the numeric data
             prcomp(finaldf[,-c(1,2)], scale. = TRUE)
         print(autoplot(pca_res,
@@ -139,7 +137,24 @@ ml_learning_spatial <-
                 theme(
                     axis.text = element_text(colour = "black", size = 12),
                     axis.ticks.length = unit(0.25, "cm"))) 
+       
+        #organelle distribution plots
+        orgDist <- 
+            finaldf %>%
+            dplyr::select(c(1,4:9,2)) %>%
+            gather("condition", "intensity", 2:7) 
         
+        print(ggplot(data=orgDist,
+            aes(x=condition, y=intensity, group = Protein.Name, color =Predicted_Compartment )) +
+                geom_line() +
+                facet_wrap(~ Predicted_Compartment,ncol=2) +
+                theme_bw()+
+                theme(panel.grid = element_blank())  +
+                theme(text = element_text(colour = "black",size=12)) +
+                theme(
+                    axis.text = element_text(colour = "black", size = 8),
+                    axis.ticks.length = unit(0.25, "cm"))) 
         
         return(output)
     }
+
