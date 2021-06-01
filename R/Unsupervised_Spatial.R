@@ -138,6 +138,28 @@ ggplot(tsne_output, aes(V1, V2, color=df$Marker)) +
 
 
 
+##################################################################
+#################### 6. O
+##################################################################
+
+## Executing the algorithm on curated data
+tsne_out <-
+    Rtsne(df[,-c(1,8)],
+        dims = 2, perplexity=30,#can be adjusted
+        verbose=TRUE, max_iter = 500)
+
+tsne_output <-
+    as.data.frame(tsne_out$Y)
+
+ggplot(tsne_output, aes(V1, V2, color=df$Marker)) +
+    geom_point() +
+    labs(x= "Dim1", y="Dim2", title = "Preplexity = 30") +
+    theme_bw() +
+    theme(panel.grid = element_blank())  +
+    theme(text = element_text(colour = "black",size=12)) +
+    theme(
+        axis.text = element_text(colour = "black", size = 12),
+        axis.ticks.length = unit(0.25, "cm")) 
 
 
 
