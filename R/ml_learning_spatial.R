@@ -1,3 +1,4 @@
+
 ##################################################################
 ######supervised learning & protein localization prediction#######
 ##################################################################
@@ -31,7 +32,7 @@ ml_learning_spatial <-
             stop("Marker is absent from the data.frame")
         }
         
-         if(all(colnames(df) != "Protein.Name") == TRUE){
+        if(all(colnames(df) != "Protein.Name") == TRUE){
             stop("Protein names is absent from the data.frame")
         }
         #preparer the training data 
@@ -107,11 +108,11 @@ ml_learning_spatial <-
                 geom_hline(yintercept=0.5, linetype="dashed", #0.50 cutoff
                     color = "red", size=1) +
                 theme_bw() +
-            theme(panel.grid = element_blank())  +
-            theme(text = element_text(colour = "black",size=12)) +
-            theme(
-                axis.text = element_text(colour = "black", size = 12),
-                axis.ticks.length = unit(0.25, "cm")))
+                theme(panel.grid = element_blank())  +
+                theme(text = element_text(colour = "black",size=12)) +
+                theme(
+                    axis.text = element_text(colour = "black", size = 12),
+                    axis.ticks.length = unit(0.25, "cm")))
         
         
         #visualize the result on PCA
@@ -129,16 +130,16 @@ ml_learning_spatial <-
         pca_res <- #keep the numeric data
             prcomp(finaldf[,-c(1,2)], scale. = TRUE)
         print(autoplot(pca_res,
-            data = finaldf[,-c(1)], 
+            data = finaldf[,-c(1)], size = "probScore",
             colour = "Predicted_Compartment") +
+                scale_size_continuous(range = c(0,1)) +
                 theme_bw() +
-            theme(panel.grid = element_blank())  +
-            theme(text = element_text(colour = "black",size=12)) +
-            theme(
-                axis.text = element_text(colour = "black", size = 12),
-                axis.ticks.length = unit(0.25, "cm"))) 
+                theme(panel.grid = element_blank())  +
+                theme(text = element_text(colour = "black",size=12)) +
+                theme(
+                    axis.text = element_text(colour = "black", size = 12),
+                    axis.ticks.length = unit(0.25, "cm"))) 
         
         
         return(output)
     }
-
