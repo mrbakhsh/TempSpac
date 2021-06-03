@@ -10,10 +10,10 @@ Technological advances in mass spectrometry (MS)-based proteomics and bioinforma
 
 > _Note that the pRoloc software was modified to accommodate one’s analysis in particular, to use 233 different supervised learning models provided in the caret R package  and unsupervised learning provided in the factoextra R package_
 
-# Input Data
-1. A demo dataset for spatial proteomic is retrived from **Beltran et al., Cell Systems 3 (2016)**. doi:10.1016/j.cels.2016.08.012.
+# Sample Data Description:
+1. A demo dataset for spatial proteomic is from **Beltran et al., Cell Systems 3 (2016)**. doi:10.1016/j.cels.2016.08.012.
 
-2. A demo dataset for temporal proteomic is retrived from the [recount project](https://jhubiostatistics.shinyapps.io/recount/) availbale from the SRA under **SRP049355** accession
+2. A demo dataset for temporal proteomic is  from the [recount project](https://jhubiostatistics.shinyapps.io/recount/) availbale from the Sequence Read Archive (SRA) under **SRP049355** accession.
 
 
 # License
