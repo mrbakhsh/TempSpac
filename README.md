@@ -13,7 +13,7 @@ Technological advances in mass spectrometry (MS)-based proteomics and bioinforma
 # Sample Data Description:
 1. A demo dataset for spatial proteomic is from **Beltran et al., Cell Systems 3 (2016)**. doi:10.1016/j.cels.2016.08.012.
 
-2. A demo dataset for temporal proteomic is  from the [recount project](https://jhubiostatistics.shinyapps.io/recount/) availbale from the Sequence Read Archive (SRA) under **SRP049355** accession.
+2. A demo dataset for temporal proteomic is  from the [recount project](https://jhubiostatistics.shinyapps.io/recount/) with Sequence Read Archive (SRA) acession **SRP049355**.
 
 
 # License
