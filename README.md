@@ -10,15 +10,20 @@ Technological advances in mass spectrometry (MS)-based proteomics and bioinforma
 
 > _Note: spatial proteomics data analyses pipelines provided here use caret and factoextra R packages._
 
-# Sample Data Description:
-1. A demo dataset for spatial proteomic is from **Beltran et al., Cell Systems 3 (2016)**. doi:10.1016/j.cels.2016.08.012.
 
-2. A demo dataset for temporal proteomic is  from the [recount project](https://jhubiostatistics.shinyapps.io/recount/) with Sequence Read Archive (SRA) accession **SRP049355**.
+Kuhn, M., Wing, J., Weston, S., Williams, A., Keefer, C., Engelhardt, A., et al. (2020). caret: Classification and regression training. R package version 6.0–86. https://CRAN.R-project.org/package=caret [Accessed March 21, 2020].
+
+Kassambara, A., and Mundt, F. (2020). factoextra: extract and visualize the results of multivariate data analyses. R Package version 1.0.7. https://CRAN.R-project.org/package=factoextra [Accessed April 2, 2020].
+
+# Sample Data Description:
+1. A demo spatial proteomics dataset is from **Proteome In Space and Time during Cytomegalovirus Infection. Cell Syst. 3, 361-373.** doi:10.1016/j.cels.2016.08.012. Table S2(uninfected sample at time point 96).
+
+2. A demo temporal proteomics dataset is  from the [recount project](https://jhubiostatistics.shinyapps.io/recount/) with Sequence Read Archive (SRA) accession **SRP049355**.
 
 
 # License
 This project is licensed under the MIT License - see the LICENSE.md file for more details.
 
-If using these scripts in your data analyses pipelines, please cite the paper: 
+If using these scripts in your data analyses pipelines, please cite our paper: 
 
 **Rahmatbakhsh, M., Gagarinova, A., and Babu, M. (2021). Bioinformatic Analysis of Temporal and Spatial Proteome Alternations During Infections. Submitted to _Frontiers in Genetics, Accepted._**
