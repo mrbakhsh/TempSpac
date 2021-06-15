@@ -8,17 +8,12 @@ Technological advances in mass spectrometry (MS)-based proteomics and bioinforma
 - [Code:Spatial analysis (unsupervised learning)](https://github.com/Babulab-bioc/TempSpac/blob/main/R/Unsupervised_Spatial.R)
 - [Code:Spatial analysis (supervised learning)](https://github.com/Babulab-bioc/TempSpac/blob/main/R/ml_learning_spatial.R)
 
-> _Note: spatial proteomics data analyses pipelines provided here use caret and factoextra R packages._
 
-
-Kuhn, M., Wing, J., Weston, S., Williams, A., Keefer, C., Engelhardt, A., et al. (2020). caret: Classification and regression training. R package version 6.0–86. https://CRAN.R-project.org/package=caret [Accessed March 21, 2020].
-
-Kassambara, A., and Mundt, F. (2020). factoextra: extract and visualize the results of multivariate data analyses. R Package version 1.0.7. https://CRAN.R-project.org/package=factoextra [Accessed April 2, 2020].
 
 # Sample Data Description:
-1. A demo spatial proteomics dataset is from **Proteome In Space and Time during Cytomegalovirus Infection. Cell Syst. 3, 361-373.** doi:10.1016/j.cels.2016.08.012. **Table S2(uninfected sample at time point 96)**.
+1. A demo spatial proteomics dataset is from Proteome In Space and Time during Cytomegalovirus Infection. Cell Syst. 3, 361-373. doi:10.1016/j.cels.2016.08.012. Table S2 (uninfected sample at time point 96).
 
-2. A demo temporal proteomics dataset is  from the [recount project](https://jhubiostatistics.shinyapps.io/recount/) with Sequence Read Archive (SRA) accession **SRP049355**.
+2. A demo temporal proteomics dataset is  from the [recount project](https://jhubiostatistics.shinyapps.io/recount/) with Sequence Read Archive (SRA) accession SRP049355.
 
 
 # License
