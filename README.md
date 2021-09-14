@@ -21,4 +21,4 @@ This project is licensed under the MIT License - see the LICENSE.md file for mor
 
 If using these scripts in your data analyses pipelines, please cite our paper: 
 
-**Rahmatbakhsh M, Gagarinova A and Babu M (2021) Bioinformatic Analysis of Temporal and Spatial Proteome Alternations During Infections. _Front. Genet_. 12:667936. [doi: 10.3389/fgene.2021.667936.](https://www.frontiersin.org/articles/10.3389/fgene.2021.667936/full)
+Rahmatbakhsh M, Gagarinova A and Babu M (2021) Bioinformatic Analysis of Temporal and Spatial Proteome Alternations During Infections. _Front. Genet_. 12:667936. [doi: 10.3389/fgene.2021.667936.](https://www.frontiersin.org/articles/10.3389/fgene.2021.667936/full)
