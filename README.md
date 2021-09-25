@@ -1,3 +1,9 @@
+<!-- badges: start -->
+[![](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![](https://img.shields.io/github/last-commit/mrbakhsh/TempSpac.svg)](https://github.com/mrbakhsh/TempSpac/commits/main)
+[![License: MIT (&gt;=
+3)](https://img.shields.io/badge/license-MIT-blue.svg)](https://cran.r-project.org/web/licenses/MIT)
+<!-- badges: end -->
 # Scripts for "Bioinformatic Analysis of Temporal and Spatial Proteome Alternations During Infections"
 Technological advances in mass spectrometry (MS)-based proteomics and bioinformatics allow achieving a temporal and spatial resolution of the infection process at previously unseen levels. The typical output of a quantitative MS experiment that maps temporal and/or spatial changes during an infection includes highly complex, multi-dimensional data matrices with protein abundances across space or time, represented by ion intensities or spectral counts, depending on the MS approach. Such data are challenging to analyze and interpret. This repository provides machine learning and visualization scripts for the analysis of temporal and spatial proteomics data. The scripts included in this repository can also be applied to many other types of proteomic datasets. 
 
