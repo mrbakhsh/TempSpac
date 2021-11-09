@@ -1,16 +1,11 @@
-##################################################################
-######supervised learning & protein localization prediction#######
-##################################################################
+####################################################################
+###### supervised learning & protein localization prediction #######
+####################################################################
 
 # x : data frame where rows are proteins and columns are fractions
 # model: string specifying which classification model to use
 
 
-
-
-ml_learning_spatial <- 
-    function(x, model) {
-        
         library(gplots)
         library(ggplot2)
         library(data.table)
@@ -19,8 +14,11 @@ ml_learning_spatial <-
         library(reshape2)
         library(caret)
         library(magrittr)
-        
-        
+
+
+ml_learning_spatial <- 
+    function(x, model) {
+       
         df <- x
         
         if(!is.data.frame(df)){
