@@ -5,7 +5,6 @@
 3)](https://img.shields.io/badge/license-MIT-blue.svg)](https://cran.r-project.org/web/licenses/MIT)
 <!-- badges: end -->
 
-
 # Scripts for "Bioinformatic Analysis of Temporal and Spatial Proteome Alternations During Infections"
 Technological advances in mass spectrometry (MS)-based proteomics and bioinformatics allow achieving a temporal and spatial resolution of the infection process at previously unseen levels. The typical output of a quantitative MS experiment that maps temporal and/or spatial changes during an infection includes highly complex, multi-dimensional data matrices with protein abundances across space or time, represented by ion intensities or spectral counts, depending on the MS approach. Such data are challenging to analyze and interpret. This repository provides machine learning and visualization scripts for the analysis of temporal and spatial proteomics data. The scripts included in this repository can also be applied to many other types of proteomic datasets. 
 
@@ -29,4 +28,4 @@ This project is licensed under the MIT License - see the LICENSE.md file for mor
 
 If using these scripts in your data analyses pipelines, please cite our paper: 
 
-Rahmatbakhsh M, Gagarinova A and Babu M (2021) Bioinformatic Analysis of Temporal and Spatial Proteome Alternations During Infections. _Front. Genet_. 12:667936. [doi: 10.3389/fgene.2021.667936.](https://www.frontiersin.org/articles/10.3389/fgene.2021.667936/full)
+**Rahmatbakhsh M, Gagarinova A and Babu M (2021) Bioinformatic Analysis of Temporal and Spatial Proteome Alternations During Infections. _Front. Genet_. 12:667936. [doi: 10.3389/fgene.2021.667936.](https://www.frontiersin.org/articles/10.3389/fgene.2021.667936/full)**
